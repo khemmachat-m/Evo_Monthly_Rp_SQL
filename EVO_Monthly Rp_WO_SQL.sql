@@ -787,7 +787,7 @@ Update tempEvoMonthlyReport SET TopTenant =  '-' WHERE TopTenant IS NULL;
 
 
 
--------------- End of Query ----------------------------------
+-------------- End of Report Query ----------------------------------
 
 
 
