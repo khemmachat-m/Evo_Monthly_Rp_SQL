@@ -47,6 +47,12 @@ Update TASkPPM set TypeOfPPM = "ACMG" WHERE System = 'ADMN' AND Tag = 'ACMG'; --
 update TASkPPM Set TypeOfPPM = "ENGR" Where TypeOfPPM is null;
 
 
+-- 2.6) Modify Column Name from Evo V5 to Evo V4
+ALTER TABLE TaskPPM
+	RENAME COLUMN TaskType to Type;
+ALTER TABLE TaskPPM
+	RENAME COLUMN TaskReportedDate to ReportedDate;
+
 
 --------------- END OF SECTION 2 ---------------------------------
 
