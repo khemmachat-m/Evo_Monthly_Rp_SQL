@@ -138,7 +138,14 @@ DELETE
 FROM
 	Task
 WHERE
-	building like "%demo%"
+	building like "%demo%";
+
+-- 2) Modify Column Name from Evo V5 to Evo V4
+ALTER TABLE Task
+	RENAME COLUMN TaskType to Type;
+ALTER TABLE Task
+	RENAME COLUMN TaskReportedDate to ReportedDate;
+
 
 
 -------------------------------------------------------------------
