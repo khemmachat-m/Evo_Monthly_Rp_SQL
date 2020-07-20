@@ -16,6 +16,12 @@ WHERE notes LIKE "%was not issued%";
 UPDATE EngPPM
 SET status = replace(status,"HISTORY","COMPLETE");
 
+-- 2.4) Modify Column Name from Evo V5 to Evo V4
+ALTER TABLE EngPPM
+	RENAME COLUMN TaskType to Type;
+ALTER TABLE EngPPM
+	RENAME COLUMN TaskReportedDate to ReportedDate;
+
 ------------------ END OF SECTION 1 ---------------------
 
 
