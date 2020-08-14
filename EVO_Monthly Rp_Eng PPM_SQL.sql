@@ -284,4 +284,28 @@ INSERT INTO tempMonthlyEngPPM
 	UPDATE tempMonthlyEngPPM SET Total = 0 WHERE Total IS NULL;
 
 
+	-- 3.5) Sum Total PPM Order
+	INSERT INTO tempMonthlyEngPPM
+	SELECT
+		  building
+		, BldgShortName
+		, "ALL" AS Status
+		, sum(JanQty) AS JanQty
+		, sum(FebQty) AS FebQty
+		, sum(MarQty) AS MarQty
+		, sum(AprQty) AS AprQty
+		, sum(MayQty) AS MayQty
+		, sum(JunQty) AS JunQty
+		, sum(JulQty) AS JulQty
+		, sum(AugQty) AS AugQty
+		, sum(SepQty) AS SepQty
+		, sum(OctQty) AS OctQty
+		, sum(NovQty) AS NovQty
+		, sum(DecQty) AS DecQty
+		, sum(Total) AS Total
+	FROM
+		tempMonthlyEngPPM
+	GROUP BY
+		building;
+
 ------------------- END OF SECTION 3 -----------------------
