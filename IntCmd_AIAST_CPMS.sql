@@ -456,3 +456,46 @@ INSERT INTO CH_EVAP_PRESS
   WHERE (date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
     BETWEEN DATE('now','start of month','-6 month') AND date('now','start of month', '-1 day'))
     AND ObjectName = "EVAPORATOR-PRESSURE";
+
+
+SELECT
+    T1.ts
+  , T1.ts_Date
+  , T1.ts_Time
+  , T1.EqNo
+  , T1.CHW_ENT_TEMP
+  , T2.CHW_LEV_TEMP
+  , T3.COND_ENT_TEMP
+  , T4.COND_LEV_TEMP
+  , T5.COND_PRESS
+  , T6.COND_SAT_TEMP
+  , T7.DISCHARGE_TEMP
+  , T8.EVAP_PRESS
+  , T9.EVAP_SAT_TEMP
+  , T10.MOTOR_Current_A
+  , T11.MOTOR_Current_B
+  , T12.MOTOR_Current_C
+  , T13.MOTOR_Current_FLA
+  , T14.MOTOR_TEMP
+  , T15.OIL_SUMP_PRESS
+  , T16.OIL_SUMP_TEMP
+  , T17.VSD_FREQ
+  , T18.VSD_KW
+FROM CH_CHW_ENT_TEMP    T1
+JOIN CH_CHW_LEV_TEMP    T2 ON T1.ts = T2.ts AND T1.EqNo = T2.EqNo
+JOIN CH_COND_ENT_TEMP   T3 ON T1.ts = T3.ts AND T1.EqNo = T3.EqNo
+JOIN CH_COND_LEV_TEMP   T4 ON T1.ts = T4.ts AND T1.EqNo = T4.EqNo
+JOIN CH_COND_PRESS      T5 ON T1.ts = T5.ts AND T1.EqNo = T5.EqNo
+JOIN CH_COND_SAT_TEMP   T6 ON T1.ts = T6.ts AND T1.EqNo = T6.EqNo
+JOIN CH_DISCHARGE_TEMP  T7 ON T1.ts = T7.ts AND T1.EqNo = T7.EqNo
+JOIN CH_EVAP_PRESS      T8 ON T1.ts = T8.ts AND T1.EqNo = T8.EqNo
+JOIN CH_EVAP_SAT_TEMP   T9 ON T1.ts = T9.ts AND T1.EqNo = T9.EqNo
+JOIN CH_MOTOR_CURRENT_A T10 ON T1.ts = T10.ts AND T1.EqNo = T10.EqNo
+JOIN CH_MOTOR_CURRENT_B T11 ON T1.ts = T11.ts AND T1.EqNo = T11.EqNo
+JOIN CH_MOTOR_CURRENT_C T12 ON T1.ts = T12.ts AND T1.EqNo = T12.EqNo
+JOIN CH_MOTOR_CURRENT_FLA T13 ON T1.ts = T13.ts AND T1.EqNo = T13.EqNo
+JOIN CH_MOTOR_TEMP      T14 ON T1.ts = T14.ts AND T1.EqNo = T14.EqNo
+JOIN CH_OIL_SUMP_PRESS  T15 ON T1.ts = T15.ts AND T1.EqNo = T15.EqNo
+JOIN CH_OIL_SUMP_TEMP   T16 ON T1.ts = T16.ts AND T1.EqNo = T16.EqNo
+JOIN CH_VSD_FREQ        T17 ON T1.ts = T17.ts AND T1.EqNo = T17.EqNo
+JOIN CH_VSD_KW          T18 ON T1.ts = T18.ts AND T1.EqNo = T18.EqNo;
