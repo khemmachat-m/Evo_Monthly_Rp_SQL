@@ -543,11 +543,20 @@ SELECT
   , ts_Date
   , ts_Time
   , substr( "ts",6, 2) As ts_Month
+  , EqNo
   , CHW_ENT_TEMP - CHW_LEV_TEMP AS CHW_Temp_Diff
   , CHW_LEV_TEMP - EVAP_SAT_TEMP AS Approach_Temp_Evap
   , COND_LEV_TEMP - COND_ENT_TEMP AS COND_Temp_Diff
   , COND_SAT_TEMP - COND_LEV_TEMP AS Approach_Temp_Cond
   , VSD_KW
+  -- CH01,CH02 = 510kW, CH03 = 260kW, CH04, CH05 = 130kW
+  , case EqNo
+      WHEN "CH01" THEN printf('%.2f',VSD_KW/510.00*100)
+      WHEN "CH02" THEN printf('%.2f',VSD_KW/510.00*100)
+      WHEN "CH03" THEN printf('%.2f',VSD_KW/260.00*100)
+      WHEN "CH04" THEN printf('%.2f',VSD_KW/130.00*100)
+      WHEN "CH05" THEN printf('%.2f',VSD_KW/130.00*100)
+    END AS VSD_KW_Percent
   , CHW_LEV_TEMP
   , CHW_ENT_TEMP
   , COND_ENT_TEMP
@@ -559,4 +568,4 @@ SELECT
   , OIL_SUMP_PRESS
   , COND_SAT_TEMP - EVAP_SAT_TEMP AS Refri_Temp_Diff
 FROM CPMS_New
-WHERE EqNo = "CH01" AND MOTOR_CURRENT_A > 10
+WHERE EqNo = "CH02" AND MOTOR_CURRENT_A > 10
