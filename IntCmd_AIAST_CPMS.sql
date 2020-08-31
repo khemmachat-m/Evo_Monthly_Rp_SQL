@@ -532,3 +532,31 @@ JOIN CH_OIL_SUMP_PRESS  T15 ON T1.ts = T15.ts AND T1.EqNo = T15.EqNo
 JOIN CH_OIL_SUMP_TEMP   T16 ON T1.ts = T16.ts AND T1.EqNo = T16.EqNo
 JOIN CH_VSD_FREQ        T17 ON T1.ts = T17.ts AND T1.EqNo = T17.EqNo
 JOIN CH_VSD_KW          T18 ON T1.ts = T18.ts AND T1.EqNo = T18.EqNo;
+
+
+
+
+----- Data Processing -----------
+
+SELECT
+    ts
+  , ts_Date
+  , ts_Time
+  , substr( "ts",6, 2) As ts_Month
+  , CHW_ENT_TEMP - CHW_LEV_TEMP AS CHW_Temp_Diff
+  , CHW_LEV_TEMP - EVAP_SAT_TEMP AS Approach_Temp_Evap
+  , COND_LEV_TEMP - COND_ENT_TEMP AS COND_Temp_Diff
+  , COND_SAT_TEMP - COND_LEV_TEMP AS Approach_Temp_Cond
+  , VSD_KW
+  , CHW_LEV_TEMP
+  , CHW_ENT_TEMP
+  , COND_ENT_TEMP
+  , COND_LEV_TEMP
+  , EVAP_SAT_TEMP
+  , COND_SAT_TEMP
+  , MOTOR_Current_A
+  , OIL_SUMP_TEMP
+  , OIL_SUMP_PRESS
+  , COND_SAT_TEMP - EVAP_SAT_TEMP AS Refri_Temp_Diff
+FROM CPMS_New
+WHERE EqNo = "CH01" AND MOTOR_CURRENT_A > 10
