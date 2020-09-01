@@ -458,9 +458,85 @@ INSERT INTO CH_EVAP_PRESS
     AND ObjectName = "EVAPORATOR-PRESSURE";
 
 
-
-
 -- 19.1) Create Table
+CREATE TEMPORARY TABLE IF NOT EXISTS 'CPMS_RATED_TONS' (
+ts 'TEXT',
+ts_Date 'TEXT',
+ts_Time 'TEXT',
+EqNo 'TEXT',
+CPMS_RATED_TONS 'REAL'
+);
+
+-- 19.2) Fill in the Table
+DELETE FROM CPMS_RATED_TONS;
+INSERT INTO CPMS_RATED_TONS
+
+  SELECT
+      DateTime
+    , date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
+    , substr( "DateTime",12, 8)
+    , EqNo
+    , Value
+  FROM CPMS
+  WHERE (date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
+    BETWEEN DATE('now','start of month','-6 month') AND date('now','start of month', '-1 day'))
+    AND ObjectName = "CH-TONS";
+
+
+-- 20.1) Create Table
+CREATE TEMPORARY TABLE IF NOT EXISTS 'CPMS_BLD_TON' (
+ts 'TEXT',
+ts_Date 'TEXT',
+ts_Time 'TEXT',
+EqNo 'TEXT',
+CPMS_BLD_TON 'REAL'
+);
+
+-- 20.2) Fill in the Table
+DELETE FROM CPMS_BLD_TON;
+INSERT INTO CPMS_BLD_TON
+
+  SELECT
+      DateTime
+    , date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
+    , substr( "DateTime",12, 8)
+    , EqNo
+    , Value
+  FROM CPMS
+  WHERE (date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
+    BETWEEN DATE('now','start of month','-6 month') AND date('now','start of month', '-1 day'))
+    AND ObjectName = "BLD-TON";
+
+
+-- 21.1) Create Table
+CREATE TEMPORARY TABLE IF NOT EXISTS 'CPMS_CHW_FLOW' (
+ts 'TEXT',
+ts_Date 'TEXT',
+ts_Time 'TEXT',
+EqNo 'TEXT',
+CPMS_CHW_FLOW 'REAL'
+);
+
+-- 21.2) Fill in the Table
+DELETE FROM CPMS_CHW_FLOW;
+INSERT INTO CPMS_CHW_FLOW
+
+  SELECT
+      DateTime
+    , date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
+    , substr( "DateTime",12, 8)
+    , EqNo
+    , Value
+  FROM CPMS
+  WHERE (date(substr( "Date",1, 4) || '-' || substr("Date", 6, 2) || '-' || substr("Date", 9, 2))
+    BETWEEN DATE('now','start of month','-6 month') AND date('now','start of month', '-1 day'))
+    AND ObjectName = "FLOW";
+
+----------------------
+-- Combine all Table
+----------------------
+DROP TABLE IF EXISTS 'CPMS_NEW';
+
 CREATE TABLE IF NOT EXISTS 'CPMS_New' (
 ts 'TEXT',
 ts_Date 'TEXT',
@@ -483,7 +559,10 @@ MOTOR_TEMP 'REAL',
 OIL_SUMP_PRESS 'REAL',
 OIL_SUMP_TEMP 'REAL',
 VSD_FREQ 'REAL',
-VSD_KW 'REAL'
+VSD_KW 'REAL',
+CPMS_RATED_TONS 'REAL',
+CPMS_BLD_TON 'REAL',
+CPMS_CHW_FLOW 'REAL'
 );
 
 -- 19.2) Fill in the Table
@@ -514,6 +593,9 @@ SELECT
   , T16.OIL_SUMP_TEMP
   , T17.VSD_FREQ
   , T18.VSD_KW
+  , T19.CPMS_RATED_TONS
+  , T20.CPMS_BLD_TON
+  , T21.CPMS_CHW_FLOW
 FROM CH_CHW_ENT_TEMP    T1
 JOIN CH_CHW_LEV_TEMP    T2 ON T1.ts = T2.ts AND T1.EqNo = T2.EqNo
 JOIN CH_COND_ENT_TEMP   T3 ON T1.ts = T3.ts AND T1.EqNo = T3.EqNo
@@ -531,7 +613,12 @@ JOIN CH_MOTOR_TEMP      T14 ON T1.ts = T14.ts AND T1.EqNo = T14.EqNo
 JOIN CH_OIL_SUMP_PRESS  T15 ON T1.ts = T15.ts AND T1.EqNo = T15.EqNo
 JOIN CH_OIL_SUMP_TEMP   T16 ON T1.ts = T16.ts AND T1.EqNo = T16.EqNo
 JOIN CH_VSD_FREQ        T17 ON T1.ts = T17.ts AND T1.EqNo = T17.EqNo
-JOIN CH_VSD_KW          T18 ON T1.ts = T18.ts AND T1.EqNo = T18.EqNo;
+JOIN CH_VSD_KW          T18 ON T1.ts = T18.ts AND T1.EqNo = T18.EqNo
+-- FLOW & TONS will be combined with CH-01,02,03 already
+JOIN CPMS_CHW_FLOW      T21 ON T1.ts = T21.ts
+JOIN CPMS_RATED_TONS    T19 ON T1.ts = T19.ts AND T21.EqNo = T19.EqNo
+JOIN CPMS_BLD_TON       T20 ON T1.ts = T20.ts AND T21.EqNo = T20.EqNo;
+
 
 
 
