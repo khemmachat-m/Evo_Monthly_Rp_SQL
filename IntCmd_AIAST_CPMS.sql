@@ -542,6 +542,14 @@ SELECT
     ts
   , ts_Date
   , ts_Time
+  , CASE
+      WHEN strftime('%H', ts_Time) >= strftime('%H', '06:00:00') and strftime('%H', ts_Time) < strftime('%H', '09:00:00') THEN '6-9'
+      WHEN strftime('%H', ts_Time) >= strftime('%H', '09:00:00') and strftime('%H', ts_Time) < strftime('%H', '12:00:00') THEN '9-12'
+      WHEN strftime('%H', ts_Time) >= strftime('%H', '12:00:00') and strftime('%H', ts_Time) < strftime('%H', '17:00:00') THEN '12-17'
+      WHEN strftime('%H', ts_Time) >= strftime('%H', '17:00:00') and strftime('%H', ts_Time) < strftime('%H', '21:00:00') THEN '17-21'
+      WHEN strftime('%H', ts_Time) >= strftime('%H', '21:00:00') and strftime('%H', ts_Time) < strftime('%H', '24:00:00') THEN '21-24'
+      ELSE '0-6'
+    END AS ts_Period
   , substr( "ts",6, 2) As ts_Month
   , EqNo
   , CHW_ENT_TEMP - CHW_LEV_TEMP AS CHW_Temp_Diff
