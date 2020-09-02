@@ -678,6 +678,15 @@ SELECT
   , CPMS_RATED_TONS
   , CPMS_BLD_TON
   , CPMS_CHW_FLOW
+  , printf('%.2f',VSD_KW/CPMS_BLD_TON) AS kW_TON -- For review Chiller performance only
+  , case EqNo
+      WHEN "CH01" THEN printf('%.1f',CPMS_BLD_TON/850*100)
+      WHEN "CH02" THEN printf('%.1f',CPMS_BLD_TON/850*100)
+      WHEN "CH03" THEN printf('%.1f',CPMS_BLD_TON/400*100)
+      WHEN "CH04" THEN printf('%.1f',CPMS_BLD_TON/200*100)
+      WHEN "CH05" THEN printf('%.1f',CPMS_BLD_TON/200*100)
+    END AS CH_TONS_Percent -- For review Chiller performance only
 FROM CPMS_New T1
 WHERE -- EqNo = "CH02" AND
   MOTOR_CURRENT_A > 10
+  AND CPMS_RATED_TONS = CH_RATED_TONS -- For review chiller performance only
